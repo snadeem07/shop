@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StickerPop ✨ — Cute Stickers Shop</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://cdn.jsdelivr.net/npm/fontsource-inter@5.0.20/400.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fontsource-inter@5.0.20/500.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fontsource-inter@5.0.20/600.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fontsource-inter@5.0.20/700.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fontsource-inter@5.0.20/800.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                        },
+                        cream: '#FFF8F0',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background: #FFF8F0; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+        @keyframes floatReverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(8px) rotate(-2deg); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+        }
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        .float-anim { animation: float 3s ease-in-out infinite; }
+        .float-anim-reverse { animation: floatReverse 4s ease-in-out infinite; }
+        .slide-up { animation: slideUp 0.6s ease-out forwards; }
+        .pop-in { animation: popIn 0.5s ease-out forwards; }
+        .bounce-in { animation: bounceIn 0.4s ease-out; }
+        .wiggle:hover { animation: wiggle 0.3s ease-in-out infinite; }
+
+        .sticker-card {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .sticker-card:hover {
+            transform: translateY(-8px) rotate(1deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .sticker-card:hover .sticker-img {
+            transform: scale(1.1);
+        }
+        .sticker-img {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .cart-badge {
+            animation: bounceIn 0.4s ease-out;
+        }
+
+        .sparkle-bg {
+            position: relative;
+            overflow: hidden;
+        }
+        .sparkle-bg::before {
+            content: '✨';
+            position: absolute;
+            top: 20%;
+            right: 15%;
+            font-size: 2rem;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        .sparkle-bg::after {
+            content: '⭐';
+            position: absolute;
+            bottom: 25%;
+            left: 10%;
+            font-size: 1.5rem;
+            animation: sparkle 2.5s ease-in-out infinite 0.5s;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #ec4899, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #fdf2f8 0%, #ede9fe 50%, #cffafe 100%);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        .category-pill {
+            transition: all 0.3s ease;
+        }
+        .category-pill.active {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .cart-overlay {
+            transition: opacity 0.3s ease;
+        }
+        .cart-drawer {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .added-toast {
+            animation: popIn 0.3s ease-out forwards;
+        }
+
+        .nav-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .sticker-shadow {
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.15));
+        }
+
+        .section-divider {
+            background: linear-gradient(90deg, transparent, #fbcfe8, transparent);
+            height: 2px;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fdf2f8; }
+        ::-webkit-scrollbar-thumb { background: #f9a8d4; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ec4899; }
+
+        .quantity-btn {
+            transition: all 0.2s ease;
+        }
+        .quantity-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .empty-state {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-blur bg-white/70 border-b border-pink-100 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <a href="#" class="flex items-center gap-2 group">
+                    <span class="text-2xl sm:text-3xl group-hover:animate-bounce">🎨</span>
+                    <span class="text-xl sm:text-2xl font-extrabold gradient-text">StickerPop</span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#shop" class="text-sm font-semibold text-gray-600 hover:text-brand-500 transition-colors">Shop</a>
+                    <a href="#featured" class="text-sm font-semibold text-gray-600 hover:text-brand-500 transition-colors">Featured</a>
+                    <a href="#about" class="text-sm font-semibold text-gray-600 hover:text-brand-500 transition-colors">About</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleSearch()" class="p-2 rounded-full hover:bg-pink-50 transition-colors" title="Search">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </button>
+                    <button onclick="toggleCart()" class="relative p-2 rounded-full hover:bg-pink-50 transition-colors" title="Cart">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                        <span id="cartCount" class="hidden absolute -top-1 -right-1 w-5 h-5 bg-brand-500 text-white text-xs font-bold rounded-full flex items-center justify-center cart-badge">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Search Bar -->
+        <div id="searchBar" class="hidden border-t border-pink-100 bg-white/90">
+            <div class="max-w-2xl mx-auto px-4 py-3">
+                <div class="relative">
+                    <input id="searchInput" type="text" placeholder="Search stickers..." oninput="filterStickers()" class="w-full px-4 py-2.5 pl-10 rounded-xl border border-pink-200 bg-pink-50/50 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent text-sm">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient pt-28 sm:pt-36 pb-16 sm:pb-24 px-4 relative overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-20 left-10 text-6xl opacity-20 float-anim">🌸</div>
+            <div class="absolute top-40 right-20 text-5xl opacity-20 float-anim-reverse">🦌</div>
+            <div class="absolute bottom-20 left-1/4 text-4xl opacity-15 float-anim" style="animation-delay: 1s;">✨</div>
+            <div class="absolute bottom-32 right-1/3 text-5xl opacity-20 float-anim-reverse" style="animation-delay: 0.5s;">🌈</div>
+            <div class="absolute top-60 left-2/3 text-4xl opacity-15 float-anim" style="animation-delay: 1.5s;">🎀</div>
+        </div>
+        <div class="max-w-7xl mx-auto text-center relative z-10">
+            <div class="slide-up">
+                <span class="inline-block px-4 py-1.5 bg-white/80 rounded-full text-sm font-semibold text-brand-500 mb-6 border border-brand-100">
+                    ✨ New Collection Available
+                </span>
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
+                    <span class="gradient-text">Cute Stickers</span><br>
+                    <span class="text-gray-700">For Every Occasion</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
+                    Adorable, hand-crafted stickers to decorate your world. From laptops to journals, express yourself with our kawaii collection! 💕
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#shop" class="btn-primary px-8 py-3.5 rounded-full text-white font-semibold text-sm sm:text-base inline-flex items-center gap-2">
+                        <span>Shop Now</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                    <a href="#featured" class="btn-secondary px-8 py-3.5 rounded-full text-white font-semibold text-sm sm:text-base inline-flex items-center gap-2">
+                        <span>View Featured</span>
+                        <span>⭐</span>
+                    </a>
+                </div>
+            </div>
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-4 sm:gap-8 max-w-lg mx-auto mt-14 slide-up" style="animation-delay: 0.3s;">
+                <div class="text-center">
+                    <div class="text-2xl sm:text-3xl font-extrabold text-brand-500">500+</div>
+                    <div class="text-xs sm:text-sm text-gray-400 font-medium mt-1">Stickers</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl sm:text-3xl font-extrabold text-purple-500">10K+</div>
+                    <div class="text-xs sm:text-sm text-gray-400 font-medium mt-1">Happy Customers</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl sm:text-3xl font-extrabold text-cyan-500">4.9⭐</div>
+                    <div class="text-xs sm:text-sm text-gray-400 font-medium mt-1">Rating</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee Banner -->
+    <div class="bg-brand-500 py-3 overflow-hidden">
+        <div class="flex animate-[shimmer_20s_linear_infinite] whitespace-nowrap" style="width: max-content;">
+            <span class="mx-8 text-white font-semibold text-sm">✨ FREE SHIPPING OVER $25</span>
+            <span class="mx-8 text-white font-semibold text-sm">🌸 NEW KAWAII COLLECTION</span>
+            <span class="mx-8 text-white font-semibold text-sm">🎨 100% WATERPROOF</span>
+            <span class="mx-8 text-white font-semibold text-sm">💕 BUY 5 GET 1 FREE</span>
+            <span class="mx-8 text-white font-semibold text-sm">🦌 ECO-FRIENDLY MATERIALS</span>
+            <span class="mx-8 text-white font-semibold text-sm">✨ FREE SHIPPING OVER $25</span>
+            <span class="mx-8 text-white font-semibold text-sm">🌸 NEW KAWAII COLLECTION</span>
+            <span class="mx-8 text-white font-semibold text-sm">🎨 100% WATERPROOF</span>
+            <span class="mx-8 text-white font-semibold text-sm">💕 BUY 5 GET 1 FREE</span>
+            <span class="mx-8 text-white font-semibold text-sm">🦌 ECO-FRIENDLY MATERIALS</span>
+        </div>
+    </div>
+
+    <!-- Categories -->
+    <section class="py-12 sm:py-16 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-10">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-3">Browse Categories</h2>
+                <p class="text-gray-400">Find your perfect sticker style</p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3 sm:gap-4">
+                <button onclick="filterCategory('all')" class="category-pill active px-5 py-2.5 rounded-full text-sm font-semibold bg-white border border-pink-200 text-gray-600 hover:border-brand-300">
+                    🌟 All
+                </button>
+                <button onclick="filterCategory('animals')" class="category-pill px-5 py-2.5 rounded-full text-sm font-semibold bg-white border border-pink-200 text-gray-600 hover:border-brand-300">
+                    🐱 Animals
+                </button>
+                <button onclick="filterCategory('nature')" class="category-pill px-5 py-2.5 rounded-full text-sm font-semibold bg-white border border-pink-200 text-gray-600 hover:border-brand-300">
+                    🌸 Nature
+                </button>
+                <button onclick="filterCategory('food')" class="category-pill px-5 py-2.5 rounded-full text-sm font-semibold bg-white border border-pink-200 text-gray-600 hover:border-brand-300">
+                    ☕ Food & Drink
+                </button>
+                <button onclick="filterCategory('celestial')" class="category-pill px-5 py-2.5 rounded-full text-sm font-semibold bg-white border border-pink-200 text-gray-600 hover:border-brand-300">
+                    🌙 Celestial
+                </button>
+                <button onclick="filterCategory('love')" class="category-pill px-5 py-2.5 rounded-full text-sm font-semibold bg-white border border-pink-200 text-gray-600 hover:border-brand-300">
+                    💖 Love
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shop Section -->
+    <section id="shop" class="py-8 sm:py-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800">Our Stickers</h2>
+                    <p class="text-gray-400 mt-1 text-sm sm:text-base" id="stickerCount">Showing 6 stickers</p>
+                </div>
+                <select onchange="sortStickers(this.value)" class="px-4 py-2 rounded-xl border border-pink-200 bg-white text-sm font-medium text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-400 cursor-pointer">
+                    <option value="featured">Sort: Featured</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="name">Name: A-Z</option>
+                </select>
+            </div>
+            <div id="stickerGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <!-- Stickers will be rendered by JS -->
+            </div>
+            <div id="noResults" class="hidden text-center py-20">
+                <div class="text-6xl mb-4 empty-state">🔍</div>
+                <h3 class="text-xl font-bold text-gray-600 mb-2">No stickers found</h3>
+                <p class="text-gray-400">Try a different search or category</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Section -->
+    <section id="featured" class="py-16 sm:py-24 px-4 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="bg-gradient-to-r from-purple-50 via-pink-50 to-cyan-50 rounded-3xl p-8 sm:p-12 lg:p-16 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-brand-200/20 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 w-48 h-48 bg-purple-200/20 rounded-full blur-3xl"></div>
+                <div class="relative z-10 grid lg:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <span class="inline-block px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-xs font-bold mb-4">⭐ FEATURED COLLECTION</span>
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-800 mb-4 leading-tight">
+                            The Nara <span class="gradient-text">Deer & Sakura</span> Collection
+                        </h2>
+                        <p class="text-gray-500 text-lg mb-6 leading-relaxed">
+                            Inspired by the magical moments in Nara Park, Japan. Each sticker captures the serene beauty of feeding deer under cherry blossom trees.
+                        </p>
+                        <div class="flex flex-wrap gap-3 mb-8">
+                            <span class="px-3 py-1.5 bg-white rounded-lg text-xs font-semibold text-gray-500 border border-pink-100">🌸 Sakura</span>
+                            <span class="px-3 py-1.5 bg-white rounded-lg text-xs font-semibold text-gray-500 border border-pink-100">🦌 Deer</span>
+                            <span class="px-3 py-1.5 bg-white rounded-lg text-xs font-semibold text-gray-500 border border-pink-100">🏯 Japanese</span>
+                            <span class="px-3 py-1.5 bg-white rounded-lg text-xs font-semibold text-gray-500 border border-pink-100">💕 Kawaii</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="text-3xl font-extrabold text-brand-500">$3.99</span>
+                            <span class="text-lg text-gray-300 line-through">$5.99</span>
+                            <span class="px-2 py-1 bg-red-100 text-red-500 rounded-md text-xs font-bold">-33%</span>
+                        </div>
+                        <button onclick="addStickerToCart('special')" class="mt-6 btn-primary px-8 py-3.5 rounded-full text-white font-semibold text-sm inline-flex items-center gap-2">
+                            <span>Add to Cart</span>
+                            <span>🛒</span>
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <div class="bg-white rounded-2xl p-6 shadow-xl float-anim">
+                            <img src="https://image.qwenlm.ai/public_source/f3af0349-283f-462b-8e6e-cba110aa5349/1beb14f81-70bb-4304-ade3-c784ac494116.png" alt="Featured sticker" class="w-full max-w-xs mx-auto sticker-shadow rounded-xl">
+                        </div>
+                        <div class="absolute -top-4 -right-4 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold shadow-lg rotate-12">
+                            BEST SELLER
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-16 sm:py-20 px-4">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-3">How It Works</h2>
+                <p class="text-gray-400">Getting your stickers is super easy!</p>
+            </div>
+            <div class="grid sm:grid-cols-3 gap-8">
+                <div class="text-center group">
+                    <div class="w-16 h-16 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl">🔍</span>
+                    </div>
+                    <h3 class="font-bold text-gray-700 mb-2">1. Browse & Pick</h3>
+                    <p class="text-sm text-gray-400">Explore our collection and find stickers you love</p>
+                </div>
+                <div class="text-center group">
+                    <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl">🛒</span>
+                    </div>
+                    <h3 class="font-bold text-gray-700 mb-2">2. Add to Cart</h3>
+                    <p class="text-sm text-gray-400">Build your collection with our easy cart system</p>
+                </div>
+                <div class="text-center group">
+                    <div class="w-16 h-16 bg-cyan-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl">📦</span>
+                    </div>
+                    <h3 class="font-bold text-gray-700 mb-2">3. Enjoy!</h3>
+                    <p class="text-sm text-gray-400">Receive your waterproof stickers in 3-5 days</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 sm:py-20 px-4 bg-gradient-to-b from-transparent to-pink-50/50">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-6">About StickerPop ✨</h2>
+            <p class="text-gray-500 text-lg leading-relaxed mb-8">
+                We're a small team of artists passionate about creating adorable stickers that bring joy to everyday objects. Every sticker is designed with love, printed on premium waterproof vinyl, and shipped with care. 🎨💕
+            </p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-pink-50 hover:shadow-md transition-shadow">
+                    <span class="text-3xl mb-3 block">💧</span>
+                    <h4 class="font-bold text-gray-700 mb-1">Waterproof</h4>
+                    <p class="text-xs text-gray-400">Durable vinyl material</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-pink-50 hover:shadow-md transition-shadow">
+                    <span class="text-3xl mb-3 block">🌿</span>
+                    <h4 class="font-bold text-gray-700 mb-1">Eco-Friendly</h4>
+                    <p class="text-xs text-gray-400">Sustainable materials</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-pink-50 hover:shadow-md transition-shadow">
+                    <span class="text-3xl mb-3 block">✂️</span>
+                    <h4 class="font-bold text-gray-700 mb-1">Die-Cut</h4>
+                    <p class="text-xs text-gray-400">Perfect precision cuts</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-pink-50 hover:shadow-md transition-shadow">
+                    <span class="text-3xl mb-3 block">🚀</span>
+                    <h4 class="font-bold text-gray-700 mb-1">Fast Shipping</h4>
+                    <p class="text-xs text-gray-400">3-5 business days</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-16 px-4">
+        <div class="max-w-2xl mx-auto text-center">
+            <div class="bg-gradient-to-r from-brand-500 to-purple-500 rounded-3xl p-8 sm:p-12 relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10">
+                    <div class="absolute top-4 left-8 text-4xl">✨</div>
+                    <div class="absolute bottom-4 right-12 text-3xl">🌸</div>
+                    <div class="absolute top-12 right-8 text-2xl">💕</div>
+                </div>
+                <div class="relative z-10">
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-3">Stay in the Loop!</h2>
+                    <p class="text-white/80 mb-8">Get 15% off your first order + exclusive new drops</p>
+                    <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                        <input type="email" id="emailInput" placeholder="your@email.com" class="flex-1 px-5 py-3 rounded-full bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 text-sm">
+                        <button onclick="subscribe()" id="subscribeBtn" class="px-6 py-3 bg-white text-brand-500 rounded-full font-bold text-sm hover:bg-gray-100 transition-colors whitespace-nowrap">
+                            Subscribe ✨
+                        </button>
+                    </div>
+                    <p id="subscribeMsg" class="text-white/90 text-sm mt-3 hidden">🎉 Welcome! Check your email for your discount code!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-2xl">🎨</span>
+                        <span class="text-xl font-extrabold text-white">StickerPop</span>
+                    </div>
+                    <p class="text-sm leading-relaxed">Spreading joy, one sticker at a time. Made with love for sticker enthusiasts everywhere.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Shop</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">All Stickers</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">New Arrivals</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Best Sellers</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Bundles</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Help</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">FAQ</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Shipping Info</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Returns</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Follow Us</h4>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-brand-500 transition-colors">
+                            <span class="text-sm">📸</span>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-brand-500 transition-colors">
+                            <span class="text-sm">🐦</span>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-brand-500 transition-colors">
+                            <span class="text-sm">📌</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="section-divider mb-8"></div>
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
+                <p>© 2026 StickerPop. All rights reserved.</p>
+                <p>Made with 💕 and lots of stickers</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Overlay -->
+    <div id="cartOverlay" class="cart-overlay fixed inset-0 bg-black/40 z-50 hidden opacity-0" onclick="toggleCart()"></div>
+
+    <!-- Cart Drawer -->
+    <div id="cartDrawer" class="cart-drawer fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-white z-50 shadow-2xl translate-x-full flex flex-col">
+        <div class="flex items-center justify-between p-6 border-b border-pink-100">
+            <h3 class="text-xl font-extrabold text-gray-800">Your Cart 🛒</h3>
+            <button onclick="toggleCart()" class="p-2 rounded-full hover:bg-pink-50 transition-colors">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div id="cartItems" class="flex-1 overflow-y-auto p-6">
+            <!-- Cart items rendered by JS -->
+        </div>
+        <div id="cartFooter" class="border-t border-pink-100 p-6 hidden">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-gray-500 text-sm">Subtotal</span>
+                <span id="cartSubtotal" class="font-bold text-gray-700">$0.00</span>
+            </div>
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-gray-500 text-sm">Shipping</span>
+                <span id="cartShipping" class="font-bold text-green-500 text-sm">FREE</span>
+            </div>
+            <div class="flex items-center justify-between mb-6 pt-4 border-t border-pink-50">
+                <span class="text-lg font-extrabold text-gray-800">Total</span>
+                <span id="cartTotal" class="text-lg font-extrabold text-brand-500">$0.00</span>
+            </div>
+            <button onclick="checkout()" class="w-full btn-primary py-3.5 rounded-full text-white font-bold text-sm inline-flex items-center justify-center gap-2">
+                <span>Checkout</span>
+                <span>💳</span>
+            </button>
+            <button onclick="clearCart()" class="w-full mt-3 py-2 rounded-full text-gray-400 font-medium text-xs hover:text-red-400 transition-colors">
+                Clear Cart
+            </button>
+        </div>
+        <div id="cartEmpty" class="flex-1 flex flex-col items-center justify-center p-6">
+            <div class="text-6xl mb-4 empty-state">🛍️</div>
+            <h4 class="text-lg font-bold text-gray-600 mb-2">Your cart is empty</h4>
+            <p class="text-gray-400 text-sm text-center mb-6">Add some cute stickers to get started!</p>
+            <button onclick="toggleCart()" class="px-6 py-2.5 rounded-full text-brand-500 font-semibold text-sm border-2 border-brand-300 hover:bg-brand-50 transition-colors">
+                Browse Stickers
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
+
+    <script>
+        // Sticker Data
+        const stickers = [
+            {
+                id: 1,
+                name: "Kawaii Cat",
+                category: "animals",
+                price: 2.99,
+                originalPrice: 3.99,
+                image: "https://image.qwenlm.ai/public_source/f3af0349-283f-462b-8e6e-cba110aa5349/1beb14f81-70bb-4304-ade3-c784ac494116.png",
+                description: "Adorable pink & blue kitty",
+                rating: 4.9,
+                reviews: 128,
+                tag: "Best Seller"
+            },
+            {
+                id: 2,
+                name: "Sakura Blossom",
+                category: "nature",
+                price: 2.49,
+                originalPrice: 3.49,
+                image: "https://image.qwenlm.ai/public_source/f3af0349-283f-462b-8e6e-cba110aa5349/104f07b28-558b-4194-99fe-ad608863eba0.png",
+                description: "Beautiful pink cherry blossoms",
+                rating: 4.8,
+                reviews: 95,
+                tag: "New"
+            },
+            {
+                id: 3,
+                name: "Happy Rainbow",
+                category: "celestial",
+                price: 1.99,
+                originalPrice: 2.99,
+                image: "https://image.qwenlm.ai/public_source/f3af0349-283f-462b-8e6e-cba110aa5349/19678c722-461e-4eb5-b478-484f2eae67a7.png",
+                description: "Colorful rainbow with cute clouds",
+                rating: 4.9,
+                reviews: 203,
+                tag: "Popular"
+            },
+            {
+                id: 4,
+                name: "Coffee Love",
+                category: "food",
+                price: 2.49,
+                originalPrice: 3.49,
+                image: "https://image.qwenlm.ai/public_source/f3af0349-283f-462b-8e6e-cba110aa5349/1c1e06d8c-11df-4e63-b84c-670e6f6fba60.png",
+                description: "Latte art heart in pink cup",
+                rating: 4.7,
+                reviews: 87,
+                tag: null
+            },
+            {
+                id: 5,
+                name: "Moon & Star",
+                category: "celestial",
+                price: 2.99,
+                originalPrice: 3.99,
+                image: "https://image.qwenlm.ai/public_source/f3af0349-283f-462b-8e6e-cba110aa5349/17f2ac092-5a43-47ef-8b61-d2314f278e70.png",
+                description: "Kawaii moon and purple star",
+                rating: 5.0,
+                reviews: 156,
+                tag: "Top Rated"
+            },
+            {
+                id: 6,
+                name: "Heart Sparkle",
+                category: "love",
+                price: 1.99,
+                originalPrice: 2.99,
+                image: "https://image.qwenlm.ai/public_source/f3af0349-283f-462b-8e6e-cba110aa5349/1d68c99ce-5490-4939-ad6f-7114fe3e9d38.png",
+                description: "Pink hearts with gold stars",
+                rating: 4.8,
+                reviews: 174,
+                tag: "Bundle"
+            }
+        ];
+
+        let cart = [];
+        let currentCategory = 'all';
+        let currentSort = 'featured';
+
+        // Render Stickers
+        function renderStickers() {
+            const grid = document.getElementById('stickerGrid');
+            const noResults = document.getElementById('noResults');
+            const stickerCount = document.getElementById('stickerCount');
+
+            let filtered = currentCategory === 'all' ? [...stickers] : stickers.filter(s => s.category === currentCategory);
+
+            // Search filter
+            const searchTerm = document.getElementById('searchInput')?.value?.toLowerCase() || '';
+            if (searchTerm) {
+                filtered = filtered.filter(s =>
+                    s.name.toLowerCase().includes(searchTerm) ||
+                    s.description.toLowerCase().includes(searchTerm) ||
+                    s.category.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Sort
+            switch (currentSort) {
+                case 'price-low': filtered.sort((a, b) => a.price - b.price); break;
+                case 'price-high': filtered.sort((a, b) => b.price - a.price); break;
+                case 'name': filtered.sort((a, b) => a.name.localeCompare(b.name)); break;
+            }
+
+            stickerCount.textContent = `Showing ${filtered.length} sticker${filtered.length !== 1 ? 's' : ''}`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+
+            grid.innerHTML = filtered.map((sticker, index) => `
+                <div class="sticker-card bg-white rounded-2xl overflow-hidden border border-pink-100 shadow-sm" style="animation: slideUp 0.5s ease-out ${index * 0.1}s both;">
+                    <div class="relative bg-gradient-to-b from-pink-50/50 to-white p-6">
+                        ${sticker.tag ? `<span class="absolute top-3 left-3 px-2.5 py-1 bg-brand-500 text-white text-xs font-bold rounded-full">${sticker.tag}</span>` : ''}
+                        <button onclick="addToWishlist(${sticker.id})" class="absolute top-3 right-3 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-sm">
+                            <span class="text-sm">🤍</span>
+                        </button>
+                        <img src="${sticker.image}" alt="${sticker.name}" class="sticker-img w-full max-w-[200px] mx-auto block sticker-shadow">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-medium text-brand-400 bg-brand-50 px-2 py-0.5 rounded-full capitalize">${sticker.category}</span>
+                            <div class="flex items-center gap-1">
+                                <span class="text-xs text-yellow-400">⭐</span>
+                                <span class="text-xs font-semibold text-gray-500">${sticker.rating}</span>
+                                <span class="text-xs text-gray-300">(${sticker.reviews})</span>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-gray-800 text-lg mt-2">${sticker.name}</h3>
+                        <p class="text-sm text-gray-400 mt-1">${sticker.description}</p>
+                        <div class="flex items-center justify-between mt-4">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl font-extrabold text-brand-500">$${sticker.price.toFixed(2)}</span>
+                                <span class="text-sm text-gray-300 line-through">$${sticker.originalPrice.toFixed(2)}</span>
+                            </div>
+                            <button onclick="addStickerToCart(${sticker.id})" class="p-2.5 bg-brand-500 text-white rounded-xl hover:bg-brand-600 transition-colors shadow-md hover:shadow-lg active:scale-95">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter Category
+        function filterCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-pill').forEach(pill => {
+                pill.classList.remove('active');
+                if (pill.textContent.toLowerCase().includes(category === 'all' ? 'all' : category)) {
+                    pill.classList.add('active');
+                }
+            });
+            renderStickers();
+        }
+
+        // Sort Stickers
+        function sortStickers(value) {
+            currentSort = value;
+            renderStickers();
+        }
+
+        // Filter Stickers (search)
+        function filterStickers() {
+            renderStickers();
+        }
+
+        // Add to Cart
+        function addStickerToCart(stickerId) {
+            let sticker;
+            if (stickerId === 'special') {
+                sticker = { id: 'special', name: 'Nara Deer Collection', price: 3.99, image: "https://image.qwenlm.ai/public_source/f3af0349-283f-462b-8e6e-cba110aa5349/1beb14f81-70bb-4304-ade3-c784ac494116.png", quantity: 1 };
+            } else {
+                sticker = stickers.find(s => s.id === stickerId);
+            }
+
+            const existingItem = cart.find(item => item.id === sticker.id);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...sticker, quantity: 1 });
+            }
+
+            updateCartUI();
+            showToast(`${sticker.name} added to cart! 🎉`);
+        }
+
+        // Remove from Cart
+        function removeFromCart(stickerId) {
+            cart = cart.filter(item => item.id !== stickerId);
+            updateCartUI();
+        }
+
+        // Update Quantity
+        function updateQuantity(stickerId, delta) {
+            const item = cart.find(i => i.id === stickerId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    removeFromCart(stickerId);
+                    return;
+                }
+            }
+            updateCartUI();
+        }
+
+        // Clear Cart
+        function clearCart() {
+            cart = [];
+            updateCartUI();
+            showToast('Cart cleared! 🗑️');
+        }
+
+        // Update Cart UI
+        function updateCartUI() {
+            const cartCount = document.getElementById('cartCount');
+            const cartItems = document.getElementById('cartItems');
+            const cartFooter = document.getElementById('cartFooter');
+            const cartEmpty = document.getElementById('cartEmpty');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            // Badge
+            if (totalItems > 0) {
+                cartCount.classList.remove('hidden');
+                cartCount.classList.add('flex');
+                cartCount.textContent = totalItems;
+                // Re-trigger animation
+                cartCount.classList.remove('cart-badge');
+                void cartCount.offsetWidth;
+                cartCount.classList.add('cart-badge');
+            } else {
+                cartCount.classList.add('hidden');
+                cartCount.classList.remove('flex');
+            }
+
+            // Cart items
+            if (cart.length === 0) {
+                cartItems.innerHTML = '';
+                cartFooter.classList.add('hidden');
+                cartEmpty.classList.remove('hidden');
+            } else {
+                cartEmpty.classList.add('hidden');
+                cartFooter.classList.remove('hidden');
+
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="flex items-center gap-4 py-4 border-b border-pink-50 pop-in">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-contain rounded-xl bg-pink-50 p-1">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-bold text-gray-800 text-sm truncate">${item.name}</h4>
+                            <p class="text-brand-500 font-semibold text-sm">$${item.price.toFixed(2)}</p>
+                            <div class="flex items-center gap-2 mt-2">
+                                <button onclick="updateQuantity('${item.id}', -1)" class="quantity-btn w-6 h-6 rounded-full bg-pink-100 text-gray-600 flex items-center justify-center text-xs font-bold hover:bg-pink-200">−</button>
+                                <span class="text-sm font-bold text-gray-700 w-6 text-center">${item.quantity}</span>
+                                <button onclick="updateQuantity('${item.id}', 1)" class="quantity-btn w-6 h-6 rounded-full bg-pink-100 text-gray-600 flex items-center justify-center text-xs font-bold hover:bg-pink-200">+</button>
+                            </div>
+                        </div>
+                        <button onclick="removeFromCart('${item.id}')" class="p-1.5 rounded-full hover:bg-red-50 text-gray-300 hover:text-red-400 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                    </div>
+                `).join('');
+
+                const shipping = subtotal >= 25 ? 0 : 4.99;
+                document.getElementById('cartSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+                document.getElementById('cartShipping').textContent = shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`;
+                document.getElementById('cartShipping').className = shipping === 0 ? 'font-bold text-green-500 text-sm' : 'font-bold text-gray-700 text-sm';
+                document.getElementById('cartTotal').textContent = `$${(subtotal + shipping).toFixed(2)}`;
+            }
+        }
+
+        // Toggle Cart
+        function toggleCart() {
+            const overlay = document.getElementById('cartOverlay');
+            const drawer = document.getElementById('cartDrawer');
+
+            if (overlay.classList.contains('hidden')) {
+                overlay.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    overlay.style.opacity = '1';
+                    drawer.style.transform = 'translateX(0)';
+                });
+                document.body.style.overflow = 'hidden';
+            } else {
+                overlay.style.opacity = '0';
+                drawer.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, 300);
+            }
+        }
+
+        // Toggle Search
+        function toggleSearch() {
+            const searchBar = document.getElementById('searchBar');
+            searchBar.classList.toggle('hidden');
+            if (!searchBar.classList.contains('hidden')) {
+                document.getElementById('searchInput').focus();
+            }
+        }
+
+        // Wishlist
+        function addToWishlist(stickerId) {
+            showToast('Added to wishlist! 💕');
+        }
+
+        // Toast Notification
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'added-toast bg-gray-900 text-white px-5 py-3 rounded-xl shadow-lg text-sm font-medium flex items-center gap-2';
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        // Subscribe
+        function subscribe() {
+            const email = document.getElementById('emailInput').value;
+            const msg = document.getElementById('subscribeMsg');
+            const btn = document.getElementById('subscribeBtn');
+
+            if (email && email.includes('@')) {
+                btn.textContent = 'Subscribed! ✅';
+                btn.disabled = true;
+                msg.classList.remove('hidden');
+            } else {
+                showToast('Please enter a valid email 📧');
+            }
+        }
+
+        // Checkout
+        function checkout() {
+            showToast('Redirecting to checkout... 💳');
+            setTimeout(() => {
+                alert('Thank you for your order! 🎉\n\nThis is a demo - no real payment processed.\n\nTotal: ' + document.getElementById('cartTotal').textContent);
+                cart = [];
+                updateCartUI();
+                toggleCart();
+            }, 500);
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+        });
+
+        // Initialize
+        renderStickers();
+    </script>
+</body>
+</html>
+
